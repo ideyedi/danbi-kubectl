@@ -132,7 +132,13 @@ func (o *Options) Run() error {
 	)
 
 	versionInfo.ClientVersion = func() *apimachineryversion.Info { v := version.Get(); return &v }()
+	versionInfo.ClientVersion.GitVersion = "v1.34.0-danbi"
+	// Set the display version to the requested custom string
+	versionInfo.ClientVersion.GitVersion = "danbi-v1.0.0"
 	versionInfo.KustomizeVersion = getKustomizeVersion()
+
+	// Keep a copy of the version info with a valid semver for the skew check
+	clientVersionForCheck := *versionInfo.ClientVersion
 
 	if !o.ClientOnly && o.discoveryClient != nil {
 		// Always request fresh data from the server
@@ -166,7 +172,7 @@ func (o *Options) Run() error {
 	}
 
 	if versionInfo.ServerVersion != nil {
-		warningMessage, err := getVersionSkewWarning(*versionInfo.ClientVersion, *versionInfo.ServerVersion)
+		warningMessage, err := getVersionSkewWarning(clientVersionForCheck, *versionInfo.ServerVersion)
 		if err != nil {
 			return err
 		}

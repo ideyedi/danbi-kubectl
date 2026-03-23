@@ -1,0 +1,18 @@
+# Binaries
+danbi-kubectl
+
+# IDE settings (GoLand, IntelliJ)
+.idea/
+*.xml
+
+# VS Code settings
+.vscode/
+
+# Go environment
+/vendor/
+go.sum.bak
+
+# Test logs/outputs
+*.log
+*.test
+*.out
